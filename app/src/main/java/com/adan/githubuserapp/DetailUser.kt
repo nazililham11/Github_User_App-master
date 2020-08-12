@@ -71,13 +71,7 @@ class DetailUser : AppCompatActivity() {
 //
         if (user is User){
             Log.d("in if","user is User")
-//            dtl_username.text = user.username
-//            dtl_namauser.text = user.namauser
-//            dtl_data_company.text = user.datacompany
-//            dtl_data_location.text = user.datalocation
-//            dtl_data_repository.text = user.datarepository.toString()
-//            dtl_data_follower.text = user.datafollower.toString()
-//            dtl_data_following.text = user.datafollowing.toString()
+            dtl_username.text = user.username
 //
 //            Glide.with(applicationContext)
 //                .load(user.avatar)
