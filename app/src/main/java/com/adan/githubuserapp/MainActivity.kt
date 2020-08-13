@@ -1,22 +1,32 @@
+
 package com.adan.githubuserapp
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
-import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONArray
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var rvUser: RecyclerView
+    private lateinit var progressbar: ProgressBar
+
     private var title = "Github User App"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setActionBarTitle(title)
 
+        progressbar = findViewById(R.id.progressbar)
         rvUser = findViewById(R.id.rv_user)
         rvUser.setHasFixedSize(true)
 
@@ -31,11 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun parseSuccessResponse(response: String, isSearch: Boolean) {
-        Log.d("Success", "Request Success")
-
-        Log.d("Response", response)
-
-        try {
+       try {
             val users = arrayListOf<User>()
             val result = when(isSearch){
                 true -> JSONArray(response)
@@ -61,8 +68,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showFailureResponse(statusCode: Int, error: Throwable) {
-        Log.d("Fail", "Request Failure")
-
         val errorMessage = when (statusCode) {
             401 -> "$statusCode : Bad Request"
             403 -> "$statusCode : Forbidden"
@@ -73,7 +78,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getUserFromApi(username: String = "") {
-        Log.d("Start", "Start request")
+        rvUser.visibility = View.GONE
+        progressbar.visibility = View.VISIBLE
 
         val client = AsyncHttpClient()
         val isSearch = username.isBlank()
@@ -81,8 +87,6 @@ class MainActivity : AppCompatActivity() {
             true  -> "https://api.github.com/users"
             false -> "https://api.github.com/search/users?q=$username"
         }
-        Log.d("Url", url)
-
         client.addHeader("User-Agent", "Github-User-App")
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Array<Header>, responseBody: ByteArray) {
@@ -101,11 +105,35 @@ class MainActivity : AppCompatActivity() {
         rvUser.layoutManager = LinearLayoutManager(this)
         rvUser.adapter = listUserAdapter
 
-//        listUserAdapter.setOnItemClickCallback(object : UserListAdapter.OnItemClickCallback {
-//            override fun onItemClicked(data: User) {
-//                showSelectedUser(data)
-//            }
-//        })
+        listUserAdapter.onItemClick = { user ->
+            val intent = Intent(this@MainActivity, UserDetails::class.java)
+            intent.putExtra("avatar_url", user.avatar_url)
+            intent.putExtra("username", user.username)
+            intent.putExtra("usertype", user.usertype)
+            startActivity(intent)
+
+       }
+
+        rvUser.visibility = View.VISIBLE
+        progressbar.visibility = View.GONE
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu);
+
+        val menuItem = menu?.findItem(R.id.search)
+        val searchView = menuItem?.actionView as SearchView
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                getUserFromApi(query)
+                return true
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun setActionBarTitle(title: String) {
