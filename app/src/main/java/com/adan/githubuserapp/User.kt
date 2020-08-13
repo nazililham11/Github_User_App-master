@@ -7,5 +7,6 @@ import kotlinx.android.parcel.Parcelize
 data class User (
     var avatar_url: String = "",
     var username: String = "",
-    var usertype: String = ""
+    var usertype: String = "",
+    var isFavourite: Boolean = false
 ) : Parcelable

@@ -67,12 +67,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showFailureResponse(statusCode: Int, error: Throwable) {
+    private fun showFailureResponse(statusCode: Int, errorMsg: String? = "") {
         val errorMessage = when (statusCode) {
             401 -> "$statusCode : Bad Request"
             403 -> "$statusCode : Forbidden"
             404 -> "$statusCode : Not Found"
-            else -> "$statusCode : ${error.message}"
+            else -> "$statusCode : ${errorMsg?:""}"
         }
         Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_SHORT).show()
     }
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
-                showFailureResponse(statusCode, error)
+                showFailureResponse(statusCode, error.message)
             }
         })
     }
@@ -119,9 +119,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun gotoFavouritesUser()
+    {
+        startActivity(Intent(this@MainActivity, FavouritesUser::class.java))
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu);
-
         val menuItem = menu?.findItem(R.id.search)
         val searchView = menuItem?.actionView as SearchView
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -134,6 +137,13 @@ class MainActivity : AppCompatActivity() {
             }
         })
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.favourites -> { gotoFavouritesUser()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun setActionBarTitle(title: String) {
