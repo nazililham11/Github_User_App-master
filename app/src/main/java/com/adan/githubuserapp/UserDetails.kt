@@ -1,8 +1,11 @@
 package com.adan.githubuserapp
 
 import android.os.Bundle
-import android.os.UserHandle
-import android.widget.*
+import android.util.Log
+import android.widget.CompoundButton
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -40,10 +43,10 @@ class UserDetails : AppCompatActivity() {
     }
 
     private fun getIsFavourites(){
-        val db = UserHelper(this@UserDetails)
-        val isFavourte = db.isExist(user)
-        this.user.isFavourite = isFavourte
-        this.setFavourites(isFavourte)
+//        val db = FavouritesDbHandler(this@UserDetails, "", )
+//        val isFavourte = db.isExist(user)
+//        this.user.isFavourite = isFavourte
+//        this.setFavourites(isFavourte)
     }
 
     private fun initViewPager(){
@@ -63,11 +66,20 @@ class UserDetails : AppCompatActivity() {
     }
 
     private fun writeFavourites(isFavourite: Boolean){
-        var db = UserHelper(this@UserDetails)
-        if (isFavourite)
-            db.insertData(user)
-        else
-            db.deteleUser(user)
+        val db = FavouritesDbHandler(this@UserDetails, "", null, 0)
+        if (isFavourite) {
+            db.addFavourite(user)
+            Log.d("UserDetails", "Insert Start")
+
+        }
+//        val db = FavouritesUserProvider()
+//        if (isFavourite)
+//                db.insert()
+//        var db = UserHelper(this@UserDetails)
+//        if (isFavourite)
+//            db.insertData(user)
+//        else
+//            db.deteleUser(user)
     }
 
     private fun renderToView(user: User){

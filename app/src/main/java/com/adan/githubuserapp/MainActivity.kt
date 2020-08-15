@@ -118,6 +118,10 @@ class MainActivity : AppCompatActivity() {
         progressbar.visibility = View.GONE
 
     }
+    private fun gotoSetttings()
+    {
+        startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+    }
 
     private fun gotoFavouritesUser()
     {
@@ -140,7 +144,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.favourites -> { gotoFavouritesUser()
+        R.id.favourites -> {
+            gotoFavouritesUser()
+            true
+        }
+        R.id.settings -> {
+            gotoSetttings()
             true
         }
         else -> super.onOptionsItemSelected(item)

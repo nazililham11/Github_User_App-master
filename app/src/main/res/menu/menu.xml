@@ -11,10 +11,19 @@
         app:showAsAction="collapseActionView|always"
         />
 
-    <item
-        android:id="@+id/favourites"
-        android:icon="@drawable/ic_baseline_favorite_24"
-        android:title="Favourites User"
-        />
+    <group>
 
+        <item
+            android:id="@+id/favourites"
+            android:icon="@drawable/ic_baseline_favorite_24"
+            android:title="Favourites User"
+            />
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_baseline_favorite_24"
+            android:title="Settings"
+            />
+
+    </group>
 </menu>

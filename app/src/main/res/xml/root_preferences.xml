@@ -1,0 +1,17 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <PreferenceCategory
+        app:title="Alarm"
+        >
+
+        <SwitchPreferenceCompat
+            app:key="alarm"
+            app:icon="@drawable/ic_baseline_alarm_24"
+            app:title="Repeating Alarm at 09:00 AM"
+            />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

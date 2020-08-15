@@ -36,10 +36,10 @@ class FavouritesUser : AppCompatActivity() {
         rvUser.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
 
-        var db = UserHelper(this@FavouritesUser)
-        var users = db.readUser()
+//        var db = UserHelper(this@FavouritesUser)
+//        var users = db.readUser()
 
-        renderRecyclerList(users)
+//        renderRecyclerList(users)
 
     }
 
