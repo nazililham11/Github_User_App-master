@@ -1,5 +1,6 @@
 package com.adan.githubuserapp
 
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.widget.CompoundButton
@@ -43,10 +44,20 @@ class UserDetails : AppCompatActivity() {
     }
 
     private fun getIsFavourites(){
+        val selection = "username = ?"
+        val selectionArgs = arrayOf(user.username)
+
+        val prov = FavouritesProvider()
+        prov._context = this@UserDetails
+        prov.onCreate()
+
+        val c = prov.query(FavouritesProvider.CONTENT_URI, null, selection, selectionArgs, null)
+        val isFavourite = c?.moveToFirst()?:false
+
 //        val db = FavouritesDbHandler(this@UserDetails, "", )
 //        val isFavourte = db.isExist(user)
-//        this.user.isFavourite = isFavourte
-//        this.setFavourites(isFavourte)
+        this.user.isFavourite = isFavourite
+        this.setFavourites(isFavourite)
     }
 
     private fun initViewPager(){
@@ -66,12 +77,31 @@ class UserDetails : AppCompatActivity() {
     }
 
     private fun writeFavourites(isFavourite: Boolean){
-        val db = FavouritesDbHandler(this@UserDetails, "", null, 0)
-        if (isFavourite) {
-            db.addFavourite(user)
-            Log.d("UserDetails", "Insert Start")
 
+
+
+        val prov = FavouritesProvider()
+        prov._context = this@UserDetails
+        prov.onCreate()
+
+        if (isFavourite){
+            val values = ContentValues()
+            values.put(FavouritesProvider.COLUMN_AVATAR_URL, user.avatar_url)
+            values.put(FavouritesProvider.COLUMN_USERNAME, user.username)
+            values.put(FavouritesProvider.COLUMN_USERTYPE, user.usertype)
+
+            prov.insert(FavouritesProvider.CONTENT_URI, values)
+        } else {
+            val selection = "username = ?"
+            val selectonArgs = arrayOf(user.username)
+            prov.delete(FavouritesProvider.CONTENT_URI, selection, selectonArgs)
         }
+//        val db = FavouritesDbHandler(this@UserDetails, "", null, 0)
+//        if (isFavourite) {
+//            db.addFavourite(user)
+//            Log.d("UserDetails", "Insert Start")
+//
+//        }
 //        val db = FavouritesUserProvider()
 //        if (isFavourite)
 //                db.insert()

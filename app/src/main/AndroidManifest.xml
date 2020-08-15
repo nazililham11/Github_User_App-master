@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <provider
-            android:name=".FavouritesUserProvider"
+            android:name=".FavouritesProvider"
             android:authorities="com.adan.githubuserapp"
             android:enabled="true"
             android:exported="true"></provider>

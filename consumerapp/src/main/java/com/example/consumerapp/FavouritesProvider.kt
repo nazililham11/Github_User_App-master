@@ -1,4 +1,4 @@
-package com.adan.githubuserapp
+package com.example.consumerapp
 
 import android.app.Application
 import android.content.*
@@ -44,6 +44,8 @@ class FavouritesProvider : ContentProvider() {
 
 
     override fun onCreate(): Boolean {
+        Log.d("FProv", "On Create")
+        Log.d("FProv", "On Create Done")
         return true
     }
 

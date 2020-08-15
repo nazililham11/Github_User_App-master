@@ -59,7 +59,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         fun setAlarm(state: Boolean){
-            val repeatTime = "23:06"
+            val repeatTime = "09:00"
             val repeatMessage = "Github User App Repeating Alarm At 09:00 AM"
             val alarmReceiver = AlarmReceiver()
 

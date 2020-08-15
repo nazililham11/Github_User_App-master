@@ -22,7 +22,7 @@ class FavouritesUser : AppCompatActivity() {
         rvUser = findViewById(R.id.rv_user)
         rvUser.setHasFixedSize(true)
 
-        setActionBarTitle("Favourites")
+        setActionBarTitle("Favourites User")
 
         getFavouritesUser()
     }
@@ -35,7 +35,26 @@ class FavouritesUser : AppCompatActivity() {
     private fun getFavouritesUser(){
         rvUser.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
+        val users = arrayListOf<User>()
+        val cols = arrayOf(FavouritesProvider.COLUMN_AVATAR_URL, FavouritesProvider.COLUMN_USERNAME, FavouritesProvider.COLUMN_USERTYPE)
+        val u = FavouritesProvider.CONTENT_URI
+        val c = contentResolver.query(u, cols, null, null, null)
 
+        if (c != null) {
+            if (c.moveToFirst()) {
+                do {
+                    val user = User()
+                    user.avatar_url = c.getString(c.getColumnIndex(FavouritesProvider.COLUMN_AVATAR_URL))
+                    user.username = c.getString(c.getColumnIndex(FavouritesProvider.COLUMN_USERNAME))
+                    user.usertype = c.getString(c.getColumnIndex(FavouritesProvider.COLUMN_USERTYPE))
+                    user.isFavourite = true
+                    users.add(user)
+                }
+                while (c.moveToNext())
+            }
+        }
+
+        renderRecyclerList(users)
 //        var db = UserHelper(this@FavouritesUser)
 //        var users = db.readUser()
 
